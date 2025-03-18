@@ -50,17 +50,16 @@ def current_weather():
                     "appid": api_key,
                     "units": "metric",
                     "lat": lat,
-                    "lon": long,
-                    "exclude": "minutely,hourly,alerts,daily"
+                    "lon": long
                     }
 
-            endpoint = f"https://api.openweathermap.org/data/2.5/onecall"
+            endpoint = f"https://api.openweathermap.org/data/2.5/weather"
 
             response = requests.get(endpoint, params=parameters)
             response.raise_for_status
             weather_data = response.json()
-            current_temperature.append(weather_data['current']['feels_like'])
-            current_humidity.append(weather_data['current']['humidity'])
+            current_temperature.append(weather_data['main']['feels_like'])
+            current_humidity.append(weather_data['main']['humidity'])
 
     current_weather_dict = {
         "city": cities,
@@ -112,30 +111,33 @@ def weather_data():
                     "appid": api_key,
                     "units": "metric",
                     "lat": lat,
-                    "lon": long,
-                    "exclude": "current,minutely,hourly,alerts"
+                    "lon": long
                 }
 
-            endpoint = f"https://api.openweathermap.org/data/2.5/onecall"
+            endpoint = f"https://api.openweathermap.org/data/2.5/forecast"
 
             response = requests.get(endpoint, params=parameters)
             response.raise_for_status
             weather_data = response.json()
             remaining_days = (end_date - today).days
-            if remaining_days < 7:
-                next_days = weather_data['daily'][:remaining_days + 2]
+            print(f'Remaining days: {remaining_days}')
+            print(f'Length: {len(weather_data["list"][:5])}')
+            if remaining_days < 5:
+                next_days = weather_data['list']
                 for day in next_days:
-                    week_temperature.append(day['temp']['eve'])
-                    week_humidity.append(day['humidity'])
-                    week_dates.append(str(dt.date.fromtimestamp(day['dt'])))
-                    city.append(city_name)
+                    if day['dt_txt'].split()[-1] == '00:00:00':
+                        week_temperature.append(day['main']['feels_like'])
+                        week_humidity.append(day['main']['humidity'])
+                        week_dates.append(day['dt_txt'].split()[0])
+                        city.append(city_name)
             else:
-                next_days = weather_data['daily'][:7]
+                next_days = weather_data['list'][:5]
                 for day in next_days:
-                    week_temperature.append(day['temp']['eve'])
-                    week_humidity.append(day['humidity'])
-                    week_dates.append(str(dt.date.fromtimestamp(day['dt'])))
-                    city.append(city_name)
+                    if day['dt_txt'].split()[-1] == '00:00:00':
+                        week_temperature.append(day['main']['feels_like'])
+                        week_humidity.append(day['main']['humidity'])
+                        week_dates.append(day['dt_txt'].split()[0])
+                        city.append(city_name)
 
     weather_forecast = {
         'name': city,

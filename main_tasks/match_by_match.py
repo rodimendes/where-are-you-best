@@ -96,13 +96,14 @@ def get_matches_info_to_dict(source_code):
                         player2.append(full_name)
             else:
                 for pos, player in enumerate(players):
+                    player_name = player["href"].split("/")[-1].replace("-", " ").title()
                     if pos % 2 == 0:
-                        player1.append(player['aria-label'])
+                        player1.append(player_name)
                         tournament_name_list.append(name)
                         city_list.append(city)
                         country_list.append(country)
                     else:
-                        player2.append(player['aria-label'])
+                        player2.append(player_name)
             raw_score = tournament_matches.find_all("a", class_="tennis-match__match-link")
             score_data = []
             for result in raw_score:
@@ -149,16 +150,15 @@ def get_matches_info_to_dict(source_code):
                         "units": "metric",
                         "lat": lat,
                         "lon": long,
-                        "exclude": "minutely, hourly, alerts, daily"
                         }
 
-                endpoint = f"https://api.openweathermap.org/data/2.5/onecall"
+                endpoint = f"https://api.openweathermap.org/data/2.5/weather"
 
                 response = requests.get(endpoint, params=parameters)
                 response.raise_for_status
                 weather_data = response.json()
-                temperature.append(weather_data['current']['feels_like'])
-                humidity.append(weather_data['current']['humidity'])
+                temperature.append(weather_data['main']['feels_like'])
+                humidity.append(weather_data['main']['humidity'])
         else:
             print("No one match completed so far.")
     
