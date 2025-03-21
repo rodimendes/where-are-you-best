@@ -16,7 +16,7 @@ def updating_matches():
     source_code_to_test = match_by_match.get_source_code("https://www.wtatennis.com/scores")
     matches_dict = match_by_match.get_matches_info_to_dict(source_code_to_test)
     matches_df = match_by_match.to_dataframe(matches_dict)
-    match_by_match.to_database(matches_df)
+    # match_by_match.to_database(matches_df)
     weather.current_weather()
     print("\033[92mMatches have been updated!\033[0m")
 
