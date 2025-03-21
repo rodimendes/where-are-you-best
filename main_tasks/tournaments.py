@@ -1,8 +1,8 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
+# from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
-from webdriver_manager.core.os_manager import ChromeType
+# from webdriver_manager.core.os_manager import ChromeType
 import mysql.connector
 import pandas as pd
 import pickle
@@ -28,7 +28,7 @@ def get_data_source(url):
     # driver = webdriver.Chrome(service=service, options=chrome_options)
 
     driver.get(url)
-    with open(f"tournaments_files/tournaments_list.html", "w") as file:
+    with open("tournaments_files/tournaments_list.html", "w") as file:
         file.write(driver.page_source)
     return "tournaments_files/tournaments_list.html"
 
@@ -73,7 +73,7 @@ def to_dataframe(tournaments: dict):
     """
     tournaments_df = pd.DataFrame(tournaments, columns=[column for column in tournaments.keys()])
     try:
-        with open(f"tournaments_files/tournaments.pkl", "rb") as old_file:
+        with open("tournaments_files/tournaments.pkl", "rb") as old_file:
             old_data = pickle.load(old_file)
         reunited_data = pd.concat([old_data, tournaments_df], ignore_index=True)
         full_data = pd.concat([reunited_data, old_data], ignore_index=True)
@@ -87,7 +87,7 @@ def to_dataframe(tournaments: dict):
 
         return new_data
 
-    except:
+    except BrokenPipeError:
         print("Saving full data")
         with open("tournaments_files/tournaments.pkl", "wb") as file:
             pickle.dump(tournaments_df, file)
@@ -118,7 +118,7 @@ def to_database(tournaments: pd.DataFrame):
                 start_date = row["start_date"]
                 end_date = row["end_date"]
                 year = row["year"]
-                command = f"INSERT INTO tournaments (name, city, country, surface, start_date, end_date, year) VALUES (%s, %s, %s, %s, %s, %s, %s);"
+                command = "INSERT INTO tournaments (name, city, country, surface, start_date, end_date, year) VALUES (%s, %s, %s, %s, %s, %s, %s);"
                 cursor.execute(command, (name, city, country, surface, start_date, end_date, year))
                 connection.commit()
         print("Data uploaded successfully")

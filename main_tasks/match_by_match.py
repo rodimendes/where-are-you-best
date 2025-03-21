@@ -3,10 +3,9 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.firefox.service import Service
+# from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.options import Options
 from webdriver_manager.core.os_manager import ChromeType
-from selenium.webdriver.common.by import By
 import time
 import datetime as dt
 import os
@@ -30,7 +29,7 @@ def get_source_code(url):
         firefox_options = Options()
         firefox_options.add_argument("-headless")
         driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options=firefox_options)
-    except:
+    except ConnectionError:
         print("\033[41m\033[37mFirefox Attempt FAILED\033[0m")
         time.sleep(2)
         print("\033[44m\033[37mChrome Attempt\033[0m")
@@ -62,7 +61,7 @@ def get_matches_info_to_dict(source_code):
     with open(source_code, "r") as file_to_read:
         soup = BeautifulSoup(file_to_read, 'html.parser')
     raw_data = soup.find("article")
-    if raw_data != None:
+    if raw_data is not None:
         raw_tournament_data = raw_data.find_all("div", class_="tournament-wrapper") # Prints a list with all matches info per tournament
         tournament_name_list = []
         city_list = []
@@ -109,7 +108,7 @@ def get_matches_info_to_dict(source_code):
             for result in raw_score:
                 try:
                     score_data.append(result['title'])
-                except:
+                except ValueError:
                     score_data.append("UNKNOWN")
             for match in score_data:
                 if "/" in match:
@@ -117,7 +116,7 @@ def get_matches_info_to_dict(source_code):
                     winner.append(raw_winner)
                     try:
                         score.append(match.split("/")[-1].strip())
-                    except:
+                    except ValueError:
                         score.append("UNKNOWN")
                 else:
                     raw_winner = match.split(" d ")[0].strip()
@@ -127,7 +126,7 @@ def get_matches_info_to_dict(source_code):
                         winner.append(raw_winner.strip())
                     try:
                         score.append(match.split(" ")[-1])
-                    except:
+                    except ValueError:
                         score.append("UNKNOWN")
 
         if len(player1) != 0:
@@ -138,7 +137,7 @@ def get_matches_info_to_dict(source_code):
                     "limit": 1,
                     }
                     # Getting latitude and longitude
-                coord_url = f"http://api.openweathermap.org/geo/1.0/direct"
+                coord_url = "http://api.openweathermap.org/geo/1.0/direct"
                 coord_response = requests.get(coord_url, params=coord_params)
                 coord_response.raise_for_status() # returns an HTTPError object if an error has occurred during the process. It is used for debugging the requests module.
                 lat = coord_response.json()[0]['lat']
@@ -152,7 +151,7 @@ def get_matches_info_to_dict(source_code):
                         "lon": long,
                         }
 
-                endpoint = f"https://api.openweathermap.org/data/2.5/weather"
+                endpoint = "https://api.openweathermap.org/data/2.5/weather"
 
                 response = requests.get(endpoint, params=parameters)
                 response.raise_for_status
@@ -193,7 +192,7 @@ def to_dataframe(player_matches: dict):
         try:
             try:
                 os.mkdir("matches")
-            except:
+            except FileNotFoundError:
                 with open("matches/daily.pkl", "rb") as file:
                     old_data = pickle.load(file)
                 reunited_data = pd.concat([old_data, matches_df], ignore_index=True)
@@ -204,12 +203,12 @@ def to_dataframe(player_matches: dict):
                 if new_data.shape[0] == 0:
                     print("Nothing to save")
                 keep_data = full_data.drop_duplicates(subset=['player1', 'player2', 'city'], keep="first", ignore_index=True)
-                with open(f"matches/daily.pkl", "wb") as file:
+                with open("matches/daily.pkl", "wb") as file:
                     pickle.dump(keep_data, file)
             return new_data
 
-        except:
-            with open(f"matches/daily.pkl", "wb") as file:
+        except FileExistsError:
+            with open("matches/daily.pkl", "wb") as file:
                     pickle.dump(matches_df, file)
             print("Full dataset saved")
             return matches_df
@@ -250,7 +249,7 @@ def to_database(dataframe: pd.DataFrame):
                 temperature = row["temperature"]
                 humidity = row["humidity"]
 
-                command = f"INSERT INTO matches (player1, player2, tournament, city, country, winner, score, date, temperature, humidity) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+                command = "INSERT INTO matches (player1, player2, tournament, city, country, winner, score, date, temperature, humidity) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
                 cursor.execute(command, (player1, player2, tournament, city, country, winner,  score, date, temperature, humidity))
                 connection.commit()
         print("Data uploaded successfully")
