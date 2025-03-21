@@ -87,7 +87,7 @@ def to_dataframe(tournaments: dict):
 
         return new_data
 
-    except BrokenPipeError:
+    except:
         print("Saving full data")
         with open("tournaments_files/tournaments.pkl", "wb") as file:
             pickle.dump(tournaments_df, file)

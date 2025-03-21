@@ -50,6 +50,7 @@ def get_source_code(url):
             file.write(driver.page_source)
 
     driver.quit()
+
     return f"matches_source_code/{dt.date.today()}.html"
 
 
@@ -208,6 +209,7 @@ def to_dataframe(player_matches: dict):
             return new_data
 
         except:
+            print('Caí neste except!!')
             with open("matches/daily.pkl", "wb") as file:
                     pickle.dump(matches_df, file)
             print("Full dataset saved")

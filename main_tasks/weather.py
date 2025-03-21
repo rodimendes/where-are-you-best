@@ -35,13 +35,13 @@ def current_weather():
                     "limit": 1,
                     }
                     # Getting latitude and longitude
-            coord_url = f"http://api.openweathermap.org/geo/1.0/direct"
+            coord_url = "http://api.openweathermap.org/geo/1.0/direct"
             coord_response = requests.get(coord_url, params=coord_params)
             coord_response.raise_for_status() # returns an HTTPError object if an error has occurred during the process. It is used for debugging the requests module.
             try:
                 lat = coord_response.json()[0]['lat']
                 long = coord_response.json()[0]['lon']
-            except IndexError:
+            except:
                 print(f"A city {row.city} doesn't work properly.")
                 lat = 0
                 long = 0
@@ -53,7 +53,7 @@ def current_weather():
                     "lon": long
                     }
 
-            endpoint = f"https://api.openweathermap.org/data/2.5/weather"
+            endpoint = "https://api.openweathermap.org/data/2.5/weather"
 
             response = requests.get(endpoint, params=parameters)
             response.raise_for_status
@@ -100,7 +100,7 @@ def weather_data():
             }
 
             # Get latitude and longitude
-            coord_url = f"http://api.openweathermap.org/geo/1.0/direct"
+            coord_url = "http://api.openweathermap.org/geo/1.0/direct"
             coord_response = requests.get(coord_url, params=coord_params)
             coord_response.raise_for_status() # returns an HTTPError object if an error has occurred during the process. It is used for debugging the requests module.
             lat = coord_response.json()[0]['lat']
@@ -114,7 +114,7 @@ def weather_data():
                     "lon": long
                 }
 
-            endpoint = f"https://api.openweathermap.org/data/2.5/forecast"
+            endpoint = "https://api.openweathermap.org/data/2.5/forecast"
 
             response = requests.get(endpoint, params=parameters)
             response.raise_for_status
@@ -195,7 +195,7 @@ def to_database(weather: pd.DataFrame):
                 date = row["dates"]
                 temperature = row["temperature"]
                 humidity = row["humidity"]
-                command = f"INSERT INTO weather_forecast (city, date, temperature, humidity) VALUES (%s, %s, %s, %s);"
+                command = "INSERT INTO weather_forecast (city, date, temperature, humidity) VALUES (%s, %s, %s, %s);"
                 cursor.execute(command, (city, date, temperature, humidity))
                 connection.commit()
         print("Weather data uploaded successfully")

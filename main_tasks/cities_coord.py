@@ -28,7 +28,7 @@ try:
                         }
             # Getting latitude and longitude
 
-            coord_url = f"http://api.openweathermap.org/geo/1.0/direct"
+            coord_url = "http://api.openweathermap.org/geo/1.0/direct"
             coord_response = requests.get(coord_url, params=coord_params)
             coord_response.raise_for_status() # returns an HTTPError object if an error has occurred during the process. It is used for debugging the requests module.
             lat = coord_response.json()[0]['lat']
@@ -49,6 +49,6 @@ try:
         with open("matches/daily.pkl", "wb") as file:
             pickle.dump(keep_data, file)
 except:
-    with open(f"tournaments_files/tournaments_coord.pkl", "wb") as file:
+    with open("tournaments_files/tournaments_coord.pkl", "wb") as file:
         pickle.dump(tournaments_coord, file)
     print("Full coordenates dataset saved")

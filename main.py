@@ -29,19 +29,19 @@ if (today.weekday() == 6) and ("12:00" < str(hour) < "14:00"):
         tournament_df = tournaments.to_dataframe(tournament_dict)
         tournaments.to_database(tournament_df)
         print("\033[92mtournaments module works well\033[0m")
-    except BrokenPipeError:
+    except:
         print("\033[91mtournaments not working.\033[0m")
     try:
         weather_dict = weather.weather_data()
         weather_df = weather.to_dataframe(weather_dict)
         weather.to_database(weather_df)
         print("\033[92mweather module works well\033[0m")
-    except BrokenPipeError:
+    except:
             print("\033[91mweather not working.\033[0m")
     try:
         cities_coord
         print("\033[92mcities_coord module works well\033[0m")
-    except BrokenPipeError:
+    except:
         print("\033[91mcities_coord not working.\033[0m")
 
 try:
@@ -53,7 +53,7 @@ except Exception as e:
     print("\033[93mTrying to update one more time\033[0m")
     try:
         updating_matches()
-    except BrokenPipeError:
+    except:
         email_message = f"Subject:🚨The update process is not working well.🚨\n\nCheck the update process as soon as posible to fix bugs.\n{e}"
         with smtplib.SMTP("smtp.gmail.com", port=587) as connection:
             connection.starttls()
