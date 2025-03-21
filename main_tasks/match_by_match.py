@@ -108,7 +108,7 @@ def get_matches_info_to_dict(source_code):
             for result in raw_score:
                 try:
                     score_data.append(result['title'])
-                except ValueError:
+                except:
                     score_data.append("UNKNOWN")
             for match in score_data:
                 if "/" in match:
@@ -116,7 +116,7 @@ def get_matches_info_to_dict(source_code):
                     winner.append(raw_winner)
                     try:
                         score.append(match.split("/")[-1].strip())
-                    except ValueError:
+                    except:
                         score.append("UNKNOWN")
                 else:
                     raw_winner = match.split(" d ")[0].strip()
@@ -126,7 +126,7 @@ def get_matches_info_to_dict(source_code):
                         winner.append(raw_winner.strip())
                     try:
                         score.append(match.split(" ")[-1])
-                    except ValueError:
+                    except:
                         score.append("UNKNOWN")
 
         if len(player1) != 0:
@@ -192,7 +192,7 @@ def to_dataframe(player_matches: dict):
         try:
             try:
                 os.mkdir("matches")
-            except FileNotFoundError:
+            except :
                 with open("matches/daily.pkl", "rb") as file:
                     old_data = pickle.load(file)
                 reunited_data = pd.concat([old_data, matches_df], ignore_index=True)
@@ -207,7 +207,7 @@ def to_dataframe(player_matches: dict):
                     pickle.dump(keep_data, file)
             return new_data
 
-        except FileExistsError:
+        except:
             with open("matches/daily.pkl", "wb") as file:
                     pickle.dump(matches_df, file)
             print("Full dataset saved")
