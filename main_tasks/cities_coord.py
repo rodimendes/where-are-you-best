@@ -18,7 +18,7 @@ try:
         tournaments_coord["lat"] = 0
         tournaments_coord["lon"] = 0
 
-        print(len(tournaments_coord))
+        # print(len(tournaments_coord))
         
         for pos, city in tournaments_coord.iterrows():            
             coord_params = {
