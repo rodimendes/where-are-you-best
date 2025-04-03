@@ -1,12 +1,5 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.firefox import GeckoDriverManager
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.firefox.service import Service as FirefoxService
-from selenium.webdriver.firefox.options import Options
-from webdriver_manager.core.os_manager import ChromeType
-from selenium.webdriver.common.by import By
 import time
 import datetime as dt
 import os
@@ -29,20 +22,20 @@ def get_source_code(url):
         print("\033[44m\033[37mFirefox Attempt\033[0m")
         # firefox_options = Options()
         # firefox_options.add_argument("-headless")
-        # driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()), options=firefox_options)
+        # driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()))
         driver = webdriver.Firefox()
     except:
         print("\033[41m\033[37mFirefox Attempt FAILED\033[0m")
         time.sleep(2)
         print("\033[44m\033[37mChrome Attempt\033[0m")
         # Chrome web browser
-        chrome_options = webdriver.ChromeOptions()
+        # chrome_options = webdriver.ChromeOptions()
         # chrome_options.add_argument('--headless') #### Without window
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()), options=chrome_options)
+        # driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+        driver = webdriver.Chrome()
         return
 
     driver.get(url)
-    driver.find_element(By.ID, "onetrust-reject-all-handler").click()
 
     while True:
         driver.execute_script("window.scrollBy(0, 1000)")
@@ -52,7 +45,7 @@ def get_source_code(url):
         with open(f"matches_source_code/{dt.date.today()}.html", "w") as file:
             file.write(driver.page_source)
 
-    # driver.quit()
+    driver.quit()
 
     return f"matches_source_code/{dt.date.today()}.html"
 
