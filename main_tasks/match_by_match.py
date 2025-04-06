@@ -20,19 +20,17 @@ def get_source_code(url):
     try:
         # Firefox web browser
         print("\033[44m\033[37mFirefox Attempt\033[0m")
-        # firefox_options = Options()
-        # firefox_options.add_argument("-headless")
-        # driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()))
-        driver = webdriver.Firefox()
+        firefox_options = webdriver.FirefoxOptions()
+        firefox_options.add_argument("-headless=new")
+        driver = webdriver.Firefox(options=firefox_options)
     except:
         print("\033[41m\033[37mFirefox Attempt FAILED\033[0m")
         time.sleep(2)
         print("\033[44m\033[37mChrome Attempt\033[0m")
         # Chrome web browser
-        # chrome_options = webdriver.ChromeOptions()
-        # chrome_options.add_argument('--headless') #### Without window
-        # driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
-        driver = webdriver.Chrome()
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('--headless=new') #### Without window
+        driver = webdriver.Chrome(options=chrome_options)
         return
 
     driver.get(url)
