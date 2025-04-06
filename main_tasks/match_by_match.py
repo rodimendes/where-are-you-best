@@ -21,7 +21,7 @@ def get_source_code(url):
         # Firefox web browser
         print("\033[44m\033[37mFirefox Attempt\033[0m")
         firefox_options = webdriver.FirefoxOptions()
-        firefox_options.add_argument("-headless=new")
+        firefox_options.add_argument("-headless")
         driver = webdriver.Firefox(options=firefox_options)
     except:
         print("\033[41m\033[37mFirefox Attempt FAILED\033[0m")
