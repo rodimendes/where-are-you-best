@@ -15,8 +15,8 @@ try:
             tournament_data = pickle.load(file)
         tournaments_coord = tournament_data.drop(["start_date", "end_date", "year"], axis=1)
 
-        tournaments_coord["lat"] = 0
-        tournaments_coord["lon"] = 0
+        tournaments_coord["lat"] = 0.0
+        tournaments_coord["lon"] = 0.0
         
         for pos, city in tournaments_coord.iterrows():            
             coord_params = {
