@@ -1,14 +1,9 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
-# from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service
-# from webdriver_manager.core.os_manager import ChromeType
 import mysql.connector
 import pandas as pd
 import pickle
 import os
-from webdriver_manager.firefox import GeckoDriverManager
-from selenium.webdriver.firefox.options import Options
 
 
 def get_data_source(url):
@@ -17,9 +12,9 @@ def get_data_source(url):
     The function returns the path to 'html' file and the player name.
     """
     # Firefox web browser
-    firefox_options = Options()
+    firefox_options = webdriver.FirefoxOptions()
     firefox_options.add_argument("-headless")
-    driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options=firefox_options)
+    driver = webdriver.Firefox(options=firefox_options)
 
     # # Chrome web browser
     # chrome_options = webdriver.ChromeOptions()
@@ -77,11 +72,13 @@ def to_dataframe(tournaments: dict):
             old_data = pickle.load(old_file)
         reunited_data = pd.concat([old_data, tournaments_df], ignore_index=True)
         full_data = pd.concat([reunited_data, old_data], ignore_index=True)
-        print("Dropping duplicated data")
+        
+        print("Dropping duplicated data from tournaments")
+        
         uptodate_tournaments = full_data.drop_duplicates(subset=["name", "year"], keep="first", ignore_index=True)
         new_data = full_data.drop_duplicates(subset=["name", "year"], keep=False, ignore_index=True)
         if new_data.shape[0] == 0:
-            print("Nothing to save")
+            print("Nothing to save to tournaments")
         with open("tournaments_files/tournaments.pkl", "wb") as file:
             pickle.dump(uptodate_tournaments, file)
 
@@ -144,5 +141,5 @@ def get_data_from_db():
     return content
 
 
-tournaments_dict = get_tournaments_info_to_dict("tournaments_files/tournaments_list.html")
-to_dataframe(tournaments_dict)
+# tournaments_dict = get_tournaments_info_to_dict("tournaments_files/tournaments_list.html")
+# to_dataframe(tournaments_dict)

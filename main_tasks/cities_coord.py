@@ -50,25 +50,3 @@ except:
     with open("tournaments_files/tournaments_coord.pkl", "wb") as file:
         pickle.dump(tournaments_coord, file)
     print("Full coordenates dataset saved")
-
-
-
-# pessoas = ["Angelo Mendes Vieira Pinto", "Olivia", "Rodrigo"]
-
-# print(pessoas)
-
-# >> ["Angelo", "Olivia", "Rodrigo"]
-
-# print(pessoas[0])
-
-# >> Angelo
-
-# pessoas = [{"filhos": ["Angelo Mendes Vieira Pinto", "Olivia"], "pai": "Rodrigo"}]
-
-# print(pessoas[0]["filhos"])
-
-# >> ["Angelo Mendes Vieira Pinto", "Olivia"]
-
-# print(pessoas[0]["filhos"][0])
-
-# >> "Angelo Mendes Vieira Pinto"
