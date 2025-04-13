@@ -73,7 +73,7 @@ def to_dataframe(tournaments: dict):
         reunited_data = pd.concat([old_data, tournaments_df], ignore_index=True)
         full_data = pd.concat([reunited_data, old_data], ignore_index=True)
         
-        print("Dropping duplicated data from tournaments")
+        print("Dropping duplicated data from tournaments.")
         
         uptodate_tournaments = full_data.drop_duplicates(subset=["name", "year"], keep="first", ignore_index=True)
         new_data = full_data.drop_duplicates(subset=["name", "year"], keep=False, ignore_index=True)

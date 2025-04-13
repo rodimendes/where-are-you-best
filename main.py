@@ -26,13 +26,13 @@ if (today.weekday() == 6) and ("12:00" < str(hour)):# < "14:00"):
     try:
         tournaments_url = "https://www.wtatennis.com/tournaments"
         tournament_source_file = tournaments.get_data_source(tournaments_url)
-        tournament_dict = tournaments.get_tournaments_info_to_dict(tournament_source_file)
+        tournament_dict = tournaments.get_tournaments_info_to_dict("tournaments_files/tournaments_list.html")
         
         print(f"Tournament dict - {tournament_dict}")
         
         tournament_df = tournaments.to_dataframe(tournament_dict)
         # tournaments.to_database(tournament_df)
-        print("\033[92mtournaments module works well\033[0m")
+        print("\033[92mTournaments module works well\033[0m")
     except:
         print("\033[91mTournaments not working.\033[0m")
     try:

@@ -91,6 +91,7 @@ def weather_data():
         end_date = dt.datetime.strptime(full_end_dt[pos], '%b %d %Y')
         if (start_date - today).days >= 0 and (today <= end_date):
             city_name = lista['city'][pos]
+            
             print(f'Getting data from {city_name} tournament.')
 
             coord_params = {
