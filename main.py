@@ -38,7 +38,7 @@ if (today.weekday() == 6) and ("12:00" < str(hour)):# < "14:00"):
     try:
         weather_dict = weather.weather_data()
         weather_df = weather.to_dataframe(weather_dict)
-        weather.to_database(weather_df)
+        # weather.to_database(weather_df)
         print("\033[92mweather module works well\033[0m")
     except:
             print("\033[91mweather not working.\033[0m")
