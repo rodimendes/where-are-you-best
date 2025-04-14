@@ -371,8 +371,6 @@ tournaments.index += 1
 weather_data = pd.read_pickle("weather_files/current_weather.pkl")
 weather_data.columns = ["City", "Temperature", "Humidity"]
 weather_data.set_index("City", inplace=True)
-print(weather_data)
-
 
 ### Showing data according to selection ###
 if add_sidebar == "Matches":
