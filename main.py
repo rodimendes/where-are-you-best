@@ -26,7 +26,7 @@ if (today.weekday() == 6) and ("12:00" < str(hour)):# < "14:00"):
     try:
         tournaments_url = "https://www.wtatennis.com/tournaments"
         tournament_source_file = tournaments.get_data_source(tournaments_url)
-        tournament_dict = tournaments.get_tournaments_info_to_dict("tournaments_files/tournaments_list.html")
+        tournament_dict = tournaments.get_tournaments_info_to_dict(tournament_source_file)
         
         print(f"Tournament dict - {tournament_dict}")
         
